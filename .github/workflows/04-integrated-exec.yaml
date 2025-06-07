@@ -3,75 +3,71 @@
 name: 'Execução Integrada'
 
 on:
-    workflow_dispatch:
+  workflow_dispatch:
 
 jobs:
-    inspencao:
-        runs-on: ubuntu-latest
+  inspencao:
+    runs-on: ubuntu-latest
 
-        steps:
-            - uses: actions/checkout@v4
+    steps:
+      - uses: actions/checkout@v4
 
-            - name: Instalando Yarn
-              run: npm install -g yarn
+      - name: Instalando Yarn
+        run: npm install -g yarn
 
-            - name: Instalando dependências
-              run: yarn
+      - name: Instalando dependências
+        run: yarn
 
-            - name: Checando padronizacao do código
-              run: yarn lint
+      - name: Checando padronizacao do código
+        run: yarn lint
 
+  unidade:
+    runs-on: ubuntu-latest
 
-    unidade:
-        runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
 
-        steps:
-            - uses: actions/checkout@v4
+      - name: Instalando Yarn
+        run: npm install -g yarn
 
-            - name: Instalando Yarn
-              run: npm install -g yarn
+      - name: Instalando dependencias
+        run: yarn
 
-            - name: Instalando dependencias
-              run: yarn
+      - name: Executando testes de unidade
+        run: yarn test
 
-            - name: Executando testes de unidade
-              run: yarn test
+  e2e-tests:
+    runs-on: ubuntu-latest
 
-    e2e-tests:
-        runs-on: ubuntu-latest
-        
-        steps:
+    steps:
+      - uses: actions/checkout@v4
 
-            - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node_version: 22.x
 
-            - uses: actions/setup-node@v4
-              with:
-                node_version: 22.x
+      - name: Instalando Yarn
+        run: npm install -g yarn
 
+      - name: Instalando dependências
+        run: yarn
 
-            - name: Instalando Yarn
-              run: npm install -g yarn
-      
-            - name: Instalando dependências
-              run: yarn
-      
-            - name: Instalando Playwright
-              run: yarn playwright install
-      
-            - name: Executando Testes E2E
-              run: yarn run e2e
+      - name: Instalando Playwright
+        run: yarn playwright install
 
-            - name: Upload artifacts
-              uses: actions/upload-artifact@v4
-              if: ${{ !cancelled() }}
-              with:
-                name: relatorio
-                path: ./playwright-report
-  
+      - name: Executando Testes E2E
+        run: yarn run e2e
 
-    deploy:
-        runs-on: ubuntu-latest
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        if: ${{ !cancelled() }}
+        with:
+          name: relatorio
+          path: ./playwright-report
 
-        steps:
-            - name: Deploy simulation
-              run: echo 'simulando o deploy com sucesso'
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Deploy simulation
+        run: echo 'simulando o deploy com sucesso'
