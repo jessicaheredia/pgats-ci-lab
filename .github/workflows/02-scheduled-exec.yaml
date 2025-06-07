@@ -3,7 +3,6 @@
 name: 'Execução Agendada - e2e'
 
 # regras de disparo (gatilhos/triggers)
-
 # https://crontab.guru/
 # a - minuto
 # b - hora
